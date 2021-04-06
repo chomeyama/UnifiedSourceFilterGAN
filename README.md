@@ -27,7 +27,7 @@ This repository is tested on Ubuntu 20.04 with a Titan RTX GPU.
 ## Environment setup
 
 ```bash
-$ cd uSFGAN
+$ cd UnifiedSourceFilterGAN
 $ pip install -e .
 ```
 
