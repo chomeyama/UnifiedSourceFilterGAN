@@ -1,0 +1,14 @@
+
+egs/arctic/exp
+egs/arctic/data/wav
+egs/arctic/data/hdf5
+egs/arctic/data/stats
+egs/arctic/data/scp/*.list
+egs/vcc18/exp
+egs/vcc18/data/wav
+egs/vcc18/data/hdf5
+egs/vcc18/data/stats
+egs/vcc18/data/scp/*.list
+venv
+usfgan.egg-info
+__pycache__

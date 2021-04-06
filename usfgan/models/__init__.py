@@ -1,0 +1,1 @@
+from usfgan.models.usfgan import *  # NOQA
