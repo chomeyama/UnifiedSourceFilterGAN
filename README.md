@@ -7,7 +7,6 @@ This is official [uSFGAN](https://arxiv.org/) PyTorch implementation.
 uSFGAN is a unified source-filter model developed based on factorization of [QPPWG](https://github.com/bigpon/QPPWG).
 
 In this repo, we provide an example to train and test uSFGAN as a vocoder for [WORLD](https://doi.org/10.1587/transinf.2015EDP7457) acoustic features.
-More details can be found on our [Demo](https://bigpon.github.io/QuasiPeriodicParallelWaveGAN_demo) page.
 
 
 ## News
