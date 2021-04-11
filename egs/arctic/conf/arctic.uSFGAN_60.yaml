@@ -36,10 +36,10 @@ generator_params:
     hop_size: 80          # Hop size.
     in_channels: 1        # Number of input channels.
     out_channels: 1       # Number of output channels.
-    blockFs: [0, 20]      # Number of fixed residual blocks.
-    cycleFs: [0, 2]       # Number of fixed dilation cycles.
-    blockAs: [20, 0]      # Number of adaptive residual blocks.
-    cycleAs: [4, 0]       # Number of adaptive dilation cycles.
+    blockFs: [0, 30]      # Number of fixed residual blocks.
+    cycleFs: [0, 3]       # Number of fixed dilation cycles.
+    blockAs: [30, 0]      # Number of adaptive residual blocks.
+    cycleAs: [6, 0]       # Number of adaptive dilation cycles.
     cascade_modes: [1, 1] # Network cascaded mode (0: fix->adaptive; 1: adaptive->fix).
     residual_channels: 64 # Number of channels in residual conv.
     gate_channels: 128    # Number of channels in gated conv.

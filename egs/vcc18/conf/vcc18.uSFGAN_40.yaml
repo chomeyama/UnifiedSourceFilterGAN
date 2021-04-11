@@ -85,6 +85,7 @@ source_loss_params:
     fft_size: 2048       # FFT size.
     f0_floor: 45         # Minimum F0 value.
     f0_ceil: 450         # Maximum F0 value.
+                         # 'fft_size' must be larger than (3.0 * 'sampling_rate' / 'f0_floor')
 
 ###########################################################
 #               ADVERSARIAL LOSS SETTING                  #
@@ -96,7 +97,7 @@ lambda_adv: 4.0            # Loss balancing coefficient.
 #                  DATA LOADER SETTING                    #
 ###########################################################
 batch_size: 6              # Batch size.
-batch_max_steps: 25520     # Length of each audio in batch. Make sure dividable by hop_size.
+batch_max_steps: 22550     # Length of each audio in batch. Make sure dividable by hop_size.
 pin_memory: true           # Whether to pin memory in Pytorch DataLoader.
 num_workers: 2             # Number of workers in Pytorch DataLoader.
 remove_short_samples: true # Whether to remove samples the length of which are less than batch_max_steps.
