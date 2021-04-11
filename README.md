@@ -4,13 +4,14 @@
 README is in the process of being written!
 
 This is official [uSFGAN](https://arxiv.org/) PyTorch implementation.
-uSFGAN is a unified source-filter model developed based on factorization of [QPPWG](https://github.com/bigpon/QPPWG).
+uSFGAN is a unified source-filter network based on factorization of [QPPWG](https://github.com/bigpon/QPPWG) by Yi-Chiao Wu @ Nagoya University ([@bigpon](https://github.com/bigpon).
 
 <p align="center">
 <img src="https://user-images.githubusercontent.com/10822486/82352944-af1dca80-9a39-11ea-806d-1aa6a91d2773.png"/>
 </p>
 
-In this repo, we provide an example to train and test uSFGAN as a vocoder for [WORLD](https://doi.org/10.1587/transinf.2015EDP7457) acoustic features.
+In this repo, we provide an example to train and test uSFGAN as a vocoder for [WORLD](https://doi.org/10.1587/transinf.2015EDP7457) acoustic features. 
+More details can be found on our [Demo](https://chomeyama.github.io/UnifiedSourceFilterGAN_demo/) page.
 
 
 ## News
@@ -120,16 +121,8 @@ $ bash run.sh --gpu 0 --stage 3 --conf uSFGAN_40 --scaled 0.50 \
 $ tensorboard --logdir exp
 ```
 
-- The training time of uSFGAN_40 with a TITAN RTX is around 7 days.
+- The training time of uSFGAN_40 with a TITAN RTX is around 6 days.
 
-
-## Inference speed (RTF)
-
-## Models and results
-
-## Usage of pre-trained models
-
-### Analysis-synthesis
 
 ## Citation
 
