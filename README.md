@@ -6,6 +6,10 @@ README is in the process of being written!
 This is official [uSFGAN](https://arxiv.org/) PyTorch implementation.
 uSFGAN is a unified source-filter network based on factorization of [QPPWG](https://github.com/bigpon/QPPWG) by Yi-Chiao Wu @ Nagoya University ([@bigpon](https://github.com/bigpon).
 
+<p align="center">
+<img width="717" alt="uSFGAN" src="https://user-images.githubusercontent.com/49127218/114294361-18d31700-9ad9-11eb-8af8-9cb034adccbb.png">
+</p>
+
 In this repo, we provide an example to train and test uSFGAN as a vocoder for [WORLD](https://doi.org/10.1587/transinf.2015EDP7457) acoustic features. 
 More details can be found on our [Demo](https://chomeyama.github.io/UnifiedSourceFilterGAN_demo/) page.
 
@@ -87,7 +91,7 @@ $ bash run.sh --stage 0 --conf uSFGAN_40
 - **Testing aux list**: `data/scp/vcc18_eval_22kHz.list`.
 
 
-### uSGFGAN training
+### uSFGAN training
 
 ```bash
 # Training a uSFGAN model with the 'uSFGAN_40' config and the 'vcc18_train_22kHz' and 'vcc18_valid_22kHz' sets.
