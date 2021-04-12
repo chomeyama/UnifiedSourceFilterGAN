@@ -650,7 +650,7 @@ def main():
         hop_size=config["hop_size"],
         dense_factor=config.get("dense_factor", 4),
         f0_threshold=config.get("f0_threshold", 0),
-        f0_cont=config.get("f0_cont", True),
+        f0_cont=config.get("f0_cont", False),
         f0_dim_idx=config.get("f0_dim_idx", 0),
         uv_dim_idx=config.get("uv_dim_idx", 1),
         mean_path=config.get("mean_path", "/world/mean"),
