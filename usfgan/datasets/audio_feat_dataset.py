@@ -181,7 +181,7 @@ class FeatDataset(Dataset):
                  hop_size=110,
                  dense_factor=4,
                  f0_threshold=0,
-                 f0_cont=True,
+                 f0_cont=False,
                  f0_dim_idx=1,
                  uv_dim_idx=0,
                  mean_path="/world/mean",
