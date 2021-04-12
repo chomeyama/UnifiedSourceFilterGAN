@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2021 Reo Yoneyama (Nagoya University)
-# based on a Quasi-Periodic Parallel WaveGAN script by Yi-Chiao Wu (Nagoya University)
-# (https://github.com/bigpon/QPPWG)
-# and also based on a Parallel WaveGAN script by Tomoki Hayashi (Nagoya University)
+# Copyright 2020 Yi-Chiao Wu (Nagoya University)
+# based on a Parallel WaveGAN script by Tomoki Hayashi (Nagoya University)
 # (https://github.com/kan-bayashi/ParallelWaveGAN)
 #  MIT License (https://opensource.org/licenses/MIT)
 

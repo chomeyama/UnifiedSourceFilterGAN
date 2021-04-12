@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2021 Reo Yoneyama (Nagoya University)
-# based on a Quasi-Periodic Parallel WaveGAN script by Yi-Chiao Wu (Nagoya University)
-# (https://github.com/bigpon/QPPWG)
-# and also based on a WaveNet script by Tomoki Hayashi (Nagoya University)
+# Copyright 2020 Yi-Chiao Wu (Nagoya University)
+# based on a WaveNet script by Tomoki Hayashi (Nagoya University)
 # (https://github.com/kan-bayashi/PytorchWaveNetVocoder)
-# and also based on sprocket-vc script by Kazuhiro Kobayashi (Nagoya University)
+# based on sprocket-vc script by Kazuhiro Kobayashi (Nagoya University)
 # (https://github.com/k2kobayashi/sprocket)
 #  MIT License (https://opensource.org/licenses/MIT)
 

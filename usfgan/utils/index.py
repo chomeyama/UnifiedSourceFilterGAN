@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2021 Reo Yoneyama (Nagoya University)
-# based on a Quasi-Periodic Parallel WaveGAN script by Yi-Chiao Wu (Nagoya University)
-# (https://github.com/bigpon/QPPWG)
+# Copyright 2020 Yi-Chiao Wu (Nagoya University)
 #  MIT License (https://opensource.org/licenses/MIT)
 
 """Indexing-related functions."""
