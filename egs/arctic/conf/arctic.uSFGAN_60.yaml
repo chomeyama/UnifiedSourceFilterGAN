@@ -21,6 +21,7 @@ mcep_dim_end: 28           # Last dimension index of mcep
 ap_dim_start: 29           # First dimension index of coded ap 
 ap_dim_end: 29             # Last dimension index of coded ap
 stats_shift: 1             # Skip U/V in calculating statistics
+f0_cont: False             # Continuous F0 or descrete F0
 minf0: 40                  # Minimum f0
 maxf0: 600                 # Maximum f0
 pow_th: -20                # Power threshold
