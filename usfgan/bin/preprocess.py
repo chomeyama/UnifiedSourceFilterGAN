@@ -308,7 +308,10 @@ def world_feature_extract(queue, wav_list, config):
         # concatenate
         cont_f0_lpf = np.expand_dims(cont_f0_lpf, axis=-1)
         uv = np.expand_dims(uv, axis=-1)
-        feats = np.concatenate([uv, cont_f0_lpf, mcep, codeap], axis=1)
+        if config['f0_cont']:
+            feats = np.concatenate([uv, cont_f0_lpf, mcep, codeap], axis=1)
+        else:
+            feats = np.concatenate([uv, f0[:, np.newaxis], mcep, codeap], axis=1)
 
         # save feature
         feat_name = path_replace(wav_name, config['indir'],
@@ -418,6 +421,12 @@ def melf0_feature_extract(queue, wav_list, config):
         uv = np.expand_dims(uv, axis=-1)
         minlen = min(uv.shape[0], mel.shape[0])
         feats = np.concatenate([uv[:minlen, :], cont_f0_lpf[:minlen, :],
+                                mel.astype(np.float32)[:minlen, :]], axis=1)
+        if config['f0_cont']:
+            feats = np.concatenate([uv[:minlen, :], cont_f0_lpf[:minlen, :],
+                                mel.astype(np.float32)[:minlen, :]], axis=1)
+        else:
+            feats = np.concatenate([uv[:minlen, :], f0[:minlen, np.newaxis],
                                 mel.astype(np.float32)[:minlen, :]], axis=1)
 
         # save feature
