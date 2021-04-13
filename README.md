@@ -1,7 +1,7 @@
 
 # Unified Source-Filter GAN (uSFGAN)
 
-This is official  PyTorch implementation of [uSFGAN](https://arxiv.org/), which is a unified source-filter network based on factorization of [QPPWG](https://github.com/bigpon/QPPWG) by Yi-Chiao Wu @ Nagoya University ([@bigpon](https://github.com/bigpon)).
+This is official  PyTorch implementation of [uSFGAN](https://arxiv.org/abs/2104.04668), which is a unified source-filter network based on factorization of [QPPWG](https://github.com/bigpon/QPPWG) by Yi-Chiao Wu @ Nagoya University ([@bigpon](https://github.com/bigpon)).
 
 <p align="center">
 <img width="717" alt="uSFGAN" src="https://user-images.githubusercontent.com/49127218/114294361-18d31700-9ad9-11eb-8af8-9cb034adccbb.png">
