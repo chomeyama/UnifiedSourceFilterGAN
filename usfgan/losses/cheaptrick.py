@@ -51,6 +51,7 @@ class Step1(torch.nn.Module):
         windows = self.window[f0]
 
         # Adaptive windowing and calculate power spectrogram.
+        # In test, change x[:, : -1, :] to x.
         x = torch.abs(torch.fft.rfft(x[:, : -1, :] * windows)).pow(2)
 
         return x
@@ -194,7 +195,7 @@ class CheapTrick(torch.nn.Module):
         x = self.step1(x, f0)
 
         # Step2: Smoothing of the power spectrogram (linear axis). 
-        # We omit this step for faster computation.
+        # This step is ommited for faster computation.
         # x = self.step2(x, f0)
     
         # Step3: Smoothing (log axis) and spectral recovery on the cepstrum domain.
@@ -214,20 +215,24 @@ if __name__ == "__main__":
     import librosa.display
     import matplotlib.pyplot as plt
 
-    sampling_rate = 16000
-    hop_size = 80
-    frame_period = hop_size * 1000 / sampling_rate
+    config = {
+        'sampling_rate': 16000,
+        'hop_size': 80,
+        'fft_size': 1024,
+        'f0_floor': 50,
+        'f0_ceil': 500
+    }
 
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    cheaptrick = CheapTrick(sampling_rate, hop_size)
+    cheaptrick = CheapTrick(**config)
     cheaptrick.to(device)
 
     file_name = "../../egs/arctic/data/wav/arctic_evaluation/bdl/bdl_arctic_b0474.wav"
     x, sr = sf.read(file_name)
-    x = x[:sampling_rate]
-    _f0, t = pw.dio(x, sampling_rate, frame_period=frame_period)
-    f0 = pw.stonemask(x, _f0, t, sampling_rate)
-    ap = pw.d4c(x, f0, t, sampling_rate)
+    x = x[:config['sampling_rate']]
+    _f0, t = pw.dio(x, config['sampling_rate'], frame_period=config['hop_size'] * 1000 / config['sampling_rate'])
+    f0 = pw.stonemask(x, _f0, t, config['sampling_rate'])
+    ap = pw.d4c(x, f0, t, config['sampling_rate'])
 
     x = torch.from_numpy(np.array(x[np.newaxis, :]).astype(np.float64)).clone().to(device)
     f0 = torch.from_numpy(np.array(f0[np.newaxis, :]).astype(np.float64)).clone().to(device)
@@ -236,14 +241,14 @@ if __name__ == "__main__":
     f0 = f0.to('cpu').numpy().copy().astype('float64')[0]
 
     # confirm whether the signal is resynthesized properly 
-    y = pw.synthesize(f0, sp, ap, sampling_rate, frame_period)
+    y = pw.synthesize(f0, sp, ap, config['sampling_rate'], config['hop_size'] * 1000 / config['sampling_rate'])
     save_name = 'resynthesized.wav'
-    sf.write(save_name, y, sampling_rate)
+    sf.write(save_name, y, config['sampling_rate'])
 
     # confirm whether reasonable spectral envelopes are extracted
     sp_db = librosa.power_to_db(sp)
-    librosa.display.specshow(data=sp_db.T, sr=sampling_rate, 
-                             hop_length=80, y_axis='linear', x_axis='time')
+    librosa.display.specshow(data=sp_db.T, sr=config['sampling_rate'], 
+                             hop_length=config['hop_size'], y_axis='linear', x_axis='time')
     plt.colorbar(format="%+2.f dB")
     save_name = 'spectrogram.png'
     plt.savefig(save_name)
