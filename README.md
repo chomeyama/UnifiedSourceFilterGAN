@@ -49,7 +49,7 @@ The folder for corpus related files (wav, feature, list ...).
 - **usfgan**:
 The folder of the source codes.
 
-- Other projects are also provided in **egs/arctic** and **egs/vasc** .
+- Other projects are also available in **egs/arctic** and **egs/vasc** .
 
 ## Run
 
@@ -145,6 +145,6 @@ E-mail: `yoneyama.reo@g.sp.m.is.nagoya-u.ac.jp`
 
 Advisor:
 Yi-Chiao Wu @ Nagoya University ([@bigpon](https://github.com/bigpon))<br />
-E-mail: `yichiao.wu@g.sp.m.is.nagoya-u.ac.jp`
+E-mail: `yichiao.wu@g.sp.m.is.nagoya-u.ac.jp`  
 Tomoki Toda @ Nagoya University<br />
 E-mail: `tomoki@icts.nagoya-u.ac.jp`
