@@ -121,12 +121,6 @@ def main():
     pad_fn = torch.nn.ReplicationPad1d(
         config["generator_params"].get("aux_context_window", 0))
 
-    # params = 0
-    # for p in model.parameters():
-    #     # if p.requires_grad:   
-    #     params += p.numel()
-    # print(params)
-
     # start generation
     total_rtf = 0.0
     with torch.no_grad(), tqdm(dataset, desc="[decode]") as pbar:
