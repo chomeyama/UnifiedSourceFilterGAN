@@ -7,7 +7,7 @@ This is official  PyTorch implementation of [uSFGAN](https://arxiv.org/abs/2104.
 <img width="717" alt="uSFGAN" src="https://user-images.githubusercontent.com/49127218/114294361-18d31700-9ad9-11eb-8af8-9cb034adccbb.png">
 </p>
 
-In this repo, we provide an example to train and test uSFGAN as a vocoder for [WORLD](https://doi.org/10.1587/transinf.2015EDP7457) acoustic features. 
+In this repo, we provide an example to train and test uSFGAN as a vocoder for [WORLD](https://doi.org/10.1587/transinf.2015EDP7457) acoustic features.  
 More details can be found on our [Demo](https://chomeyama.github.io/UnifiedSourceFilterGAN_demo/) page.
 
 
@@ -49,13 +49,15 @@ The folder for corpus related files (wav, feature, list ...).
 - **usfgan**:
 The folder of the source codes.
 
+- Other projects are also available in **egs/arctic** and **egs/vasc** .
 
 ## Run
 
 ### Corpus and path setup
 
 - Modify the corresponding CUDA paths in `egs/vcc18/run.py`.
-- Download the [Voice Conversion Challenge 2018](https://datashare.is.ed.ac.uk/handle/10283/3061) (VCC2018) corpus to run the uSFGAN example
+- Download the [Voice Conversion Challenge 2018](https://datashare.is.ed.ac.uk/handle/10283/3061) (VCC2018) corpus to run the uSFGAN example.
+- If you want to run on other datasets, download [CMU-ARCTIC](http://www.festvox.org/cmu_arctic/) corpus or [声優統計コーパス](https://github.com/voice-statistics/voice-statistics.github.com).
 
 ```bash
 $ cd egs/vcc18
@@ -122,6 +124,18 @@ $ tensorboard --logdir exp
 
 
 ## Citation
+If you find the code is helpful, please cite the following article.
+
+```
+@misc{yoneyama2021unified,
+      title={Unified Source-Filter GAN: Unified Source-filter Network Based On Factorization of Quasi-Periodic Parallel WaveGAN}, 
+      author={Reo Yoneyama and Yi-Chiao Wu and Tomoki Toda},
+      year={2021},
+      eprint={2104.04668},
+      archivePrefix={arXiv},
+      primaryClass={cs.SD}
+}
+```
 
 ## Authors
 
@@ -131,6 +145,6 @@ E-mail: `yoneyama.reo@g.sp.m.is.nagoya-u.ac.jp`
 
 Advisor:
 Yi-Chiao Wu @ Nagoya University ([@bigpon](https://github.com/bigpon))<br />
-E-mail: `yichiao.wu@g.sp.m.is.nagoya-u.ac.jp`
+E-mail: `yichiao.wu@g.sp.m.is.nagoya-u.ac.jp`  
 Tomoki Toda @ Nagoya University<br />
 E-mail: `tomoki@icts.nagoya-u.ac.jp`
