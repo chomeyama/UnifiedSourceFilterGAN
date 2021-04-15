@@ -18,7 +18,7 @@ More details can be found on our [Demo](https://chomeyama.github.io/UnifiedSourc
 
 ## Requirements
 
-This repository is tested on Ubuntu 20.04 with a Titan RTX GPU.
+This repository is tested on Ubuntu 20.04 with a Titan RTX 3090 GPU.
 
 - Python 3.8+
 - Cuda 11.0
@@ -78,10 +78,10 @@ $ unzip data/wav/eval.zip -d data/wav/
 
 ```bash
 # Extract WORLD acoustic features and statistics of training and testing data
-$ bash run.sh --stage 0 --conf uSFGAN_40
+$ bash run.sh --stage 0 --conf uSFGAN_60
 ```
 
-- WORLD-related settings can be changed in `egs/vcc18/conf/vcc18.usfgan_40.yaml`.
+- WORLD-related settings can be changed in `egs/vcc18/conf/vcc18.uSFGAN_60.yaml`.
 - If you want to use another corpus, please create a corresponding config and a file including power thresholds and f0 ranges like `egs/vcc18/data/pow_f0_dict.yml`.
 - More details about feature extraction can be found in the [QPNet](https://github.com/bigpon/QPNet) repo.
 - The lists of auxiliary features will be automatically generated.
@@ -93,13 +93,13 @@ $ bash run.sh --stage 0 --conf uSFGAN_40
 ### uSFGAN training
 
 ```bash
-# Training a uSFGAN model with the 'uSFGAN_40' config and the 'vcc18_train_22kHz' and 'vcc18_valid_22kHz' sets.
-$ bash run.sh --gpu 0 --stage 1 --conf uSFGAN_40 \
+# Training a uSFGAN model with the 'uSFGAN_60' config and the 'vcc18_train_22kHz' and 'vcc18_valid_22kHz' sets.
+$ bash run.sh --gpu 0 --stage 1 --conf uSFGAN_60 \
 --trainset vcc18_train_22kHz --validset vcc18_valid_22kHz
 ```
 
 - The gpu ID can be set by --gpu GPU_ID (default: 0)
-- The model architecture can be set by --conf CONFIG (default: uSFGAN_40)
+- The model architecture can be set by --conf CONFIG (default: uSFGAN_60)
 - The trained model resume can be set by --resume NUM (default: None)
 
 
@@ -107,10 +107,10 @@ $ bash run.sh --gpu 0 --stage 1 --conf uSFGAN_40 \
 
 ```bash
 # uSFGAN/QPPWG/PWG decoding w/ natural acoustic features
-$ bash run.sh --gpu 0 --stage 2 --conf uSFGAN_40 \
+$ bash run.sh --gpu 0 --stage 2 --conf uSFGAN_60 \
 --iter 400000 --trainset vcc18_train_22kHz --evalset vcc18_eval_22kHz
 # uSFGAN/QPPWG/PWG decoding w/ scaled f0 (ex: halved f0).
-$ bash run.sh --gpu 0 --stage 3 --conf uSFGAN_40 --scaled 0.50 \
+$ bash run.sh --gpu 0 --stage 3 --conf uSFGAN_60 --scaled 0.50 \
 --iter 400000 --trainset vcc18_train_22kHz --evalset vcc18_eval_22kHz
 ```
 
@@ -120,7 +120,7 @@ $ bash run.sh --gpu 0 --stage 3 --conf uSFGAN_40 --scaled 0.50 \
 $ tensorboard --logdir exp
 ```
 
-- The training time of uSFGAN_40 with a TITAN RTX is around 7 days.
+- The training time of uSFGAN_60 with a TITAN RTX 3090 is around 6 days.
 
 
 ## Citation
