@@ -151,21 +151,20 @@ def main():
             pbar.set_postfix({"RTF": rtf})
             total_rtf += rtf
 
-            # # save as PCM 16 bit wav file
-            # feat_path = os.path.splitext(feat_path)[0]
-            # feat_path = feat_path.replace(args.indir, args.outdir)
-            # if f0_factor == 1.0:  # unchanged
-            #     wav_filename = f"{feat_path}.wav"
-            # else:  # scaled f0
-            #     wav_filename = f"{feat_path}_f{f0_factor:.2f}.wav"
-            # if not os.path.exists(os.path.dirname(wav_filename)):
-            #     os.makedirs(os.path.dirname(wav_filename))
-            # sf.write(wav_filename, y, config.get("sampling_rate", 22050), "PCM_16")
+            # save output signal as PCM 16 bit wav file
+            feat_path = os.path.splitext(feat_path)[0]
+            feat_path = feat_path.replace(args.indir, args.outdir)
+            if f0_factor == 1.0:  # unchanged
+                wav_filename = f"{feat_path}.wav"
+            else:  # scaled f0
+                wav_filename = f"{feat_path}_f{f0_factor:.2f}.wav"
+            if not os.path.exists(os.path.dirname(wav_filename)):
+                os.makedirs(os.path.dirname(wav_filename))
+            sf.write(wav_filename, y, config.get("sampling_rate", 22050), "PCM_16")
 
+            # save source signal as PCM 16 bit wav file
             s = s.view(-1).cpu().numpy()
             s = s / max(abs(s)) * 0.9
-
-            # save as PCM 16 bit wav file
             feat_path = os.path.splitext(feat_path)[0]
             feat_path = feat_path.replace(args.indir, args.outdir)
             if f0_factor == 1.0:  # unchanged
