@@ -95,10 +95,10 @@ class SourceNetwork(torch.nn.Module):
         with torch.no_grad():
             uv = (f0 > 0) * torch.ones_like(f0)
             rad_values = (f0 / self.sampling_rate) % 1
-            b = uv * torch.sin(torch.cumsum(rad_values, dim=2) * 2 * math.pi)
+            v = uv * torch.sin(torch.cumsum(rad_values, dim=2) * 2 * math.pi)
 
         # encode to hidden representation
-        x = torch.cat((x, b), dim=1)
+        x = torch.cat((x, v), dim=1)
         x = self.conv_first(x)
         
         skips = 0
