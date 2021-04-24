@@ -167,10 +167,8 @@ class Trainer(object):
         y_, s_, f0 = self.model["generator"](*x)
         y, y_, s_, f0 = y.squeeze(1), y_.squeeze(1), s_.squeeze(1), f0.squeeze(1)
         stft_loss = self.criterion["stft"](y_, y)
-        # sc_loss, mag_loss = self.criterion["stft"](y_, y)
         source_loss = self.config["lambda_source"] * self.criterion["source"](s_, f0)
         gen_loss = stft_loss + source_loss
-        # gen_loss = sc_loss + mag_loss + self.config["lambda_source"] * source_loss
         if self.steps > self.config["discriminator_train_start_steps"]:
             gen_loss *= self.config.get("lambda_aux_after_introduce_adv_loss", 1.0)
             p_ = self.model["discriminator"](y_.unsqueeze(1))
@@ -179,8 +177,6 @@ class Trainer(object):
             self.total_train_loss["train/adversarial_loss"] += adv_loss.item()
             gen_loss += self.config["lambda_adv"] * adv_loss
 
-        # self.total_train_loss["train/spectral_convergence_loss"] += sc_loss.item()
-        # self.total_train_loss["train/log_stft_magnitude_loss"] += mag_loss.item()
         self.total_train_loss["train/stft_loss"] += stft_loss.item()
         self.total_train_loss["train/source_loss"] += source_loss.item()
         self.total_train_loss["train/generator_loss"] += gen_loss.item()
@@ -265,10 +261,8 @@ class Trainer(object):
         p_ = self.model["discriminator"](y_)
         y, y_, s_, f0 = y.squeeze(1), y_.squeeze(1), s_.squeeze(1), f0.squeeze(1)
         stft_loss = self.criterion["stft"](y_, y)
-        # sc_loss, mag_loss = self.criterion["stft"](y_, y)
         source_loss = self.criterion["source"](s_, f0)
         aux_loss = stft_loss + self.config["lambda_source"] * source_loss
-        # aux_loss = sc_loss + mag_loss + self.config["lambda_source"] * source_loss
         if self.steps > self.config["discriminator_train_start_steps"]:
             # keep compatibility
             aux_loss *= self.config.get("lambda_aux_after_introduce_adv_loss", 1.0)
@@ -289,8 +283,6 @@ class Trainer(object):
         # add to total eval loss
         self.total_eval_loss["eval/adversarial_loss"] += adv_loss.item()
         self.total_eval_loss["eval/stft_loss"] += stft_loss.item()
-        # self.total_eval_loss["eval/spectral_convergence_loss"] += sc_loss.item()
-        # self.total_eval_loss["eval/log_stft_magnitude_loss"] += mag_loss.item()
         self.total_eval_loss["eval/source_loss"] += source_loss.item()
         self.total_eval_loss["eval/generator_loss"] += gen_loss.item()
         self.total_eval_loss["eval/real_loss"] += real_loss.item()
@@ -407,7 +399,7 @@ class Trainer(object):
             plt.savefig(figname)
             plt.clf()
             plt.close()
-            
+
             if idx >= self.config["num_save_intermediate_results"]:
                 break
 
@@ -533,7 +525,7 @@ def main():
                         help="list of validation wav files")
     parser.add_argument("--valid_feat", required=True, type=str,
                         help="list of validation feat files")
-    parser.add_argument("--stats", required=True, type=str, 
+    parser.add_argument("--stats", required=True, type=str,
                         help="hdf5 file including statistics")
     parser.add_argument("--outdir", required=True, type=str,
                         help="directory to save checkpoints.")
@@ -547,7 +539,7 @@ def main():
                         help="logging level. higher is more logging. (default=1)")
     parser.add_argument("--rank", "--local_rank", default=0, type=int,
                         help="rank for distributed training. no need to explictly specify.")
-    parser.add_argument("--seed", default=1, type=int, 
+    parser.add_argument("--seed", default=1, type=int,
                         help="seed number")
     args = parser.parse_args()
 
@@ -810,7 +802,7 @@ def main():
         logging.info(f"Successfully load parameters from {args.pretrain}.")
     else:
         logging.info("Start a new training process.")
-        
+
     # run training loop
     try:
         trainer.run()
