@@ -16,7 +16,7 @@ mcep_alpha: 0.455          # Mcep alpha
 highpass_cutoff: 70        # Cutoff frequency of preprocessing highpass filter
 uv_dim_idx: 0              # u/v dimension index
 f0_dim_idx: 1              # f0 dimension index
-ap_dim_start: 37           # First dimension index of coded ap 
+ap_dim_start: 37           # First dimension index of coded ap
 ap_dim_end: 39             # Last dimension index of coded ap
 mcep_dim_start: 2          # First dimension index of mcep
 mcep_dim_end: 37           # Last dimension index of mcep
@@ -91,7 +91,7 @@ source_loss_params:
 ###########################################################
 #               ADVERSARIAL LOSS SETTING                  #
 ###########################################################
-lambda_source: 1.0         # Loss balancing coefficient.
+lambda_source: 0.05         # Loss balancing coefficient.
 lambda_adv: 4.0            # Loss balancing coefficient.
 
 ###########################################################
