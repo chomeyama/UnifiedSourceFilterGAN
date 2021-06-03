@@ -42,7 +42,6 @@ class AdaptiveWindowing(nn.Module):
         for f0 in range(f0_floor, f0_ceil + 1):
             half_win_len = round(1.5 * self.sampling_rate / f0)
             base_index = torch.arange(-half_win_len, half_win_len + 1, dtype=torch.int64)
-            position = torch.zeros((half_win_len * 2 + 1))
             position = base_index / 1.5 / self.sampling_rate
             left = fft_size // 2 - half_win_len
             right = fft_size // 2 + half_win_len + 1
