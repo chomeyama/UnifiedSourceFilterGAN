@@ -35,15 +35,14 @@ class AdaptiveWindowing(nn.Module):
         self.sampling_rate = sampling_rate
         self.hop_size = hop_size
         self.fft_size = fft_size
-        self.amp_floor = 1e-7
         self.window = torch.zeros((f0_ceil+1, fft_size)).cuda()
-        self.window_weight = torch.zeros((f0_ceil + 1)).cuda()
         self.zero_padding = nn.ConstantPad2d((fft_size // 2, fft_size // 2, 0, 0), 0)
 
         # Pre-calculation of the window functions
         for f0 in range(f0_floor, f0_ceil + 1):
             half_win_len = round(1.5 * self.sampling_rate / f0)
             base_index = torch.arange(-half_win_len, half_win_len + 1, dtype=torch.int64)
+            position = torch.zeros((half_win_len * 2 + 1))
             position = base_index / 1.5 / self.sampling_rate
             left = fft_size // 2 - half_win_len
             right = fft_size // 2 + half_win_len + 1
@@ -100,7 +99,7 @@ class AdaptiveLiftering(nn.Module):
         for f0 in range(f0_floor, f0_ceil + 1):
             smoothing_lifter = torch.zeros(self.bin_size)
             compensation_lifter = torch.zeros(self.bin_size)
-            quefrency = torch.arange(1, self.bin_size) /sampling_rate
+            quefrency = torch.arange(1, self.bin_size) / sampling_rate
             smoothing_lifter[0] = 1.0
             smoothing_lifter[1:] = torch.sin(math.pi * f0 * quefrency) / (math.pi * f0 * quefrency)
             compensation_lifter[0] = self.q0 + 2.0 * self.q1
@@ -121,7 +120,9 @@ class AdaptiveLiftering(nn.Module):
         compensation_lifter = self.compensation_lifter[f]
         # Calculating cepstrum
         tmp = torch.cat((x, torch.flip(x[:, :, 1:-1], [2])), dim=2)
-        cepstrum = torch.fft.rfft(torch.log(tmp)).real
+        cepstrum = torch.fft.rfft(
+            torch.log(torch.clamp(tmp, min=1e-7))
+            ).real
         # Liftering cepstrum with the lifters
         liftered_cepstrum = cepstrum * smoothing_lifter * compensation_lifter
         # Return the result to the spectral domain
@@ -182,11 +183,8 @@ class CheapTrick(nn.Module):
         voiced = (f > self.uv_threshold) * torch.ones_like(f)
         f = voiced * f + (1 - voiced) * self.f0_ceil
         f = torch.round(
-            torch.clamp(f,
-                        min=self.f0_floor,
-                        max=self.f0_ceil
-            )
-        ).to(torch.int64)
+                torch.clamp(f, min=self.f0_floor, max=self.f0_ceil)
+            ).to(torch.int64)
         # Step1: Adaptive windowing and calculate power spectrogram.
         x = self.ada_wind(x, f)
         # Step3: Smoothing (log axis) and spectral recovery on the cepstrum domain.
