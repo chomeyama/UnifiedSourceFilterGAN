@@ -17,7 +17,7 @@ from usfgan.losses import CheapTrick
 
 class SourceLoss(torch.nn.Module):
 
-    def __init__(self, 
+    def __init__(self,
                  sampling_rate,
                  hop_size,
                  fft_size,
@@ -35,7 +35,7 @@ class SourceLoss(torch.nn.Module):
         super(SourceLoss, self).__init__()
 
         self.cheaptrick = CheapTrick(sampling_rate=sampling_rate,
-                                     hop_size=hop_size, 
+                                     hop_size=hop_size,
                                      fft_size=fft_size,
                                      f0_floor=f0_floor,
                                      f0_ceil=f0_ceil,
@@ -43,16 +43,15 @@ class SourceLoss(torch.nn.Module):
                                      q1=q1)
         self.loss = nn.MSELoss()
 
-    def forward(self, x, f0):
+    def forward(self, x, f):
         """Calculate forward propagation.
         Args:
             x (Tensor): Predicted source signal (B, T).
-            f0 (Tensor): Extracted F0 sequence (B, T').
+            f (Tensor): Extracted F0 sequence (B, T').
         Returns:
             loss (Tensor): Source loss value.
         """
-
-        spectral_envelope = self.cheaptrick.forward(x, f0)
+        spectral_envelope = self.cheaptrick.forward(x, f)
         zeros = torch.zeros_like(spectral_envelope)
         loss = self.loss(zeros, spectral_envelope)
 

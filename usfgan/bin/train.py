@@ -164,11 +164,11 @@ class Trainer(object):
         #      Generator      #
         #######################
         # calculate generator loss
-        y_, s_, f0 = self.model["generator"](*x)
-        y, y_, s_, f0 = y.squeeze(1), y_.squeeze(1), s_.squeeze(1), f0.squeeze(1)
+        y_, s_, f = self.model["generator"](*x)
+        y, y_, s_, f = y.squeeze(1), y_.squeeze(1), s_.squeeze(1), f.squeeze(1)
         stft_loss = self.criterion["stft"](y_, y)
-        source_loss = self.config["lambda_source"] * self.criterion["source"](s_, f0)
-        gen_loss = stft_loss + source_loss
+        source_loss = self.criterion["source"](s_, f)
+        gen_loss = stft_loss + self.config["lambda_source"] * source_loss
         if self.steps > self.config["discriminator_train_start_steps"]:
             gen_loss *= self.config.get("lambda_aux_after_introduce_adv_loss", 1.0)
             p_ = self.model["discriminator"](y_.unsqueeze(1))
@@ -197,7 +197,7 @@ class Trainer(object):
         if self.steps > self.config["discriminator_train_start_steps"]:
             # re-compute y_
             with torch.no_grad():
-                y_, s_, f0 = self.model["generator"](*x)
+                y_, s_, f = self.model["generator"](*x)
             # calculate discriminator loss
             p = self.model["discriminator"](y.unsqueeze(1))
             p_ = self.model["discriminator"](y_.detach())
@@ -257,11 +257,11 @@ class Trainer(object):
         #######################
         #      Generator      #
         #######################
-        y_, s_, f0 = self.model["generator"](*x)
+        y_, s_, f = self.model["generator"](*x)
         p_ = self.model["discriminator"](y_)
-        y, y_, s_, f0 = y.squeeze(1), y_.squeeze(1), s_.squeeze(1), f0.squeeze(1)
+        y, y_, s_, f = y.squeeze(1), y_.squeeze(1), s_.squeeze(1), f.squeeze(1)
         stft_loss = self.criterion["stft"](y_, y)
-        source_loss = self.criterion["source"](s_, f0)
+        source_loss = self.criterion["source"](s_, f)
         aux_loss = stft_loss + self.config["lambda_source"] * source_loss
         if self.steps > self.config["discriminator_train_start_steps"]:
             # keep compatibility
@@ -333,16 +333,12 @@ class Trainer(object):
         x_batch, y_batch = batch
         x_batch = tuple([x.to(self.device) for x in x_batch])
         y_batch = y_batch.to(self.device)
-        y_batch_, s_batch_, f0_batch_ = self.model["generator"](*x_batch)
+        y_batch_, s_batch_, f_batch_ = self.model["generator"](*x_batch)
 
         # check directory
         dirname = os.path.join(self.config["outdir"], f"predictions/{self.steps}steps")
         if not os.path.exists(dirname):
             os.makedirs(dirname)
-
-        for idx, (y, y_, s_) in enumerate(zip(y_batch, y_batch_, s_batch_), 1):
-            # convert to ndarray
-            y, y_, s_ = y.view(-1).cpu().numpy(), y_.view(-1).cpu().numpy(), s_.view(-1).cpu().numpy()
 
         for idx, (y, y_, s_) in enumerate(zip(y_batch, y_batch_, s_batch_), 1):
             # convert to ndarray
@@ -369,7 +365,7 @@ class Trainer(object):
             sf.write(figname.replace(".png", "_gen.wav"), y_,
                      self.config["sampling_rate"], "PCM_16")
 
-            # plot figure and save it
+            # plot source waveform
             figname = os.path.join(dirname, f"{idx}_src_wave.png")
             plt.subplot(2, 1, 1)
             plt.plot(y[1000:1600], linewidth=1)
@@ -382,6 +378,7 @@ class Trainer(object):
             plt.clf()
             plt.close()
 
+            # plot source spectraogram
             figname = os.path.join(dirname, f"{idx}_src_spec.png")
             spectrogram = np.abs(librosa.stft(
                                  y=s_,
@@ -468,10 +465,10 @@ class Collater(object):
             Tensor: Target signal batch (B, 1, T).
         """
         # time resolution check
-        y_batch, f0_batch, c_batch, d_batch = [], [], [], []
+        y_batch, f_batch, c_batch, d_batch = [], [], [], []
         for idx in range(len(batch)):
-            x, f0, c, d = batch[idx]
-            self._check_length(x, f0, c, d, self.hop_size, 0)
+            x, f, c, d = batch[idx]
+            self._check_length(x, f, c, d, self.hop_size, 0)
             if len(c) - 2 * self.aux_context_window > self.batch_max_frames:
                 # randomly pickup with the batch_max_steps length of the part
                 interval_start = self.aux_context_window
@@ -479,36 +476,36 @@ class Collater(object):
                 start_frame = np.random.randint(interval_start, interval_end)
                 start_step = start_frame * self.hop_size
                 y = x[start_step: start_step + self.batch_max_steps]
-                f0 = f0[start_frame: start_frame + self.batch_max_frames]
+                f = f[start_frame: start_frame + self.batch_max_frames]
                 c = c[start_frame - self.aux_context_window:
                       start_frame + self.aux_context_window + self.batch_max_frames]
                 d = d[start_step: start_step + self.batch_max_steps]
-                self._check_length(y, f0, c, d, self.hop_size, self.aux_context_window)
+                self._check_length(y, f, c, d, self.hop_size, self.aux_context_window)
             else:
                 logging.warn(f"Removed short sample from batch (length={len(x)}).")
                 continue
             y_batch += [y.astype(np.float32).reshape(-1, 1)]  # [(T, 1), (T, 1), ...]
-            f0_batch += [f0.astype(np.float32)]  # [(T', 1), (T', 1), ...]
+            f_batch += [f.astype(np.float32)]  # [(T', 1), (T', 1), ...]
             c_batch += [c.astype(np.float32)]  # [(T' C), (T' C), ...]
             d_batch += [d.astype(np.float32).reshape(-1, 1)]  # [(T, 1), (T, 1), ...]
 
         # convert each batch to tensor, asuume that each item in batch has the same length
         y_batch = torch.FloatTensor(np.array(y_batch)).transpose(2, 1)  # (B, 1, T)
-        f0_batch = torch.FloatTensor(np.array(f0_batch)).transpose(2, 1)  # (B, 1, T')
+        f_batch = torch.FloatTensor(np.array(f_batch)).transpose(2, 1)  # (B, 1, T')
         c_batch = torch.FloatTensor(np.array(c_batch)).transpose(2, 1)  # (B, C, T')
         d_batch = torch.FloatTensor(np.array(d_batch)).transpose(2, 1)  # (B, 1, T)
 
         # make input noise signal batch tensor
         if self.input_type == "noise":
             z_batch = 0.3 * torch.randn(y_batch.size())  # (B, 1, T)
-            return (z_batch, f0_batch, c_batch, d_batch), y_batch
+            return (z_batch, f_batch, c_batch, d_batch), y_batch
         else:
             raise NotImplementedError("Currently only 'noise' input is supported ")
 
     @staticmethod
-    def _check_length(x, f0, c, d, hop_size, context_window):
+    def _check_length(x, f, c, d, hop_size, context_window):
         """Assert the audio and feature lengths are correctly adjusted for upsamping."""
-        assert len(x) == len(f0) * hop_size
+        assert len(x) == len(f) * hop_size
         assert len(x) == (len(c) - 2 * context_window) * hop_size
         assert len(x) == len(d)
 

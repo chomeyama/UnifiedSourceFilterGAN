@@ -36,7 +36,7 @@ class uSFGANGenerator(torch.nn.Module):
                  blockFs,
                  cycleFs,
                  blockAs,
-                 cycleAs, 
+                 cycleAs,
                  cascade_modes,
                  residual_channels=64,
                  gate_channels=128,
@@ -94,7 +94,7 @@ class uSFGANGenerator(torch.nn.Module):
                                             gate_channels,
                                             skip_channels,
                                             aux_channels,)
-        
+
         self.filter_network = FilterNetwork(in_channels,
                                             out_channels,
                                             blockFs[1],
@@ -107,12 +107,12 @@ class uSFGANGenerator(torch.nn.Module):
                                             skip_channels,
                                             aux_channels,)
 
-    def forward(self, x, f0, c, d):
+    def forward(self, x, f, c, d):
         """Calculate forward propagation.
 
         Args:
             x (Tensor): Input noise signal (B, 1, T).
-            f0 (Tendor): F0 (B, C, T')
+            f (Tendor): F0 (B, C, T')
             c (Tensor): Local conditioning auxiliary features (B, C ,T').
             d (Tensor): Input pitch-dependent dilated factors (B, 1, T).
 
@@ -124,18 +124,18 @@ class uSFGANGenerator(torch.nn.Module):
         batch_index, ch_index = index_initial(x.size(0), self.residual_channels)
 
         # perform upsampling
-        f0_ = self.upsample_net_f0(f0)
-        assert f0_.size(-1) == x.size(-1)
+        f_ = self.upsample_net_f0(f)
+        assert f_.size(-1) == x.size(-1)
         c = self.upsample_net(c)
         assert c.size(-1) == x.size(-1)
 
         # generate source signals
-        s = self.source_network(x, f0_, c, d, batch_index, ch_index)
+        s = self.source_network(x, f_, c, d, batch_index, ch_index)
 
         # spectral filter
         x = self.filter_network(s, c, d, batch_index, ch_index)
-  
-        return x, s, f0
+
+        return x, s, f
 
     def remove_weight_norm(self):
         """Remove weight normalization module from all of the layers."""

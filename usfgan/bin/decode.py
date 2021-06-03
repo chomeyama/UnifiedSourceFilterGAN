@@ -132,6 +132,7 @@ def main():
                 x += (z,)
             else:
                 raise NotImplementedError("Currently only 'noise' input is supported ")
+            f0[f0 > 0] = 244.0
             f0 = torch.FloatTensor(f0).unsqueeze(0).transpose(2, 1).to(device)
             c = pad_fn(torch.FloatTensor(c).unsqueeze(0).transpose(2, 1)).to(device)
             d = torch.FloatTensor(d).view(1, 1, -1).to(device)
@@ -158,7 +159,7 @@ def main():
 
             # save source signal as PCM 16 bit wav file
             s = s.view(-1).cpu().numpy()
-            s = s / max(abs(s)) * 0.9
+            s = s / max(abs(s)) * 0.5
             feat_path = os.path.splitext(feat_path)[0]
             feat_path = feat_path.replace(args.indir, args.outdir)
             if f0_factor == 1.0:  # unchanged
