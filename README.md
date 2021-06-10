@@ -4,7 +4,7 @@
 This is official  PyTorch implementation of [uSFGAN](https://arxiv.org/abs/2104.04668), which is a unified source-filter network based on factorization of [QPPWG](https://github.com/bigpon/QPPWG) by Yi-Chiao Wu @ Nagoya University ([@bigpon](https://github.com/bigpon)).
 
 <p align="center">
-<img width="717" alt="uSFGAN" src="https://user-images.githubusercontent.com/49127218/114294361-18d31700-9ad9-11eb-8af8-9cb034adccbb.png">
+<img width="754" alt="architecture" src="https://user-images.githubusercontent.com/49127218/121571723-55ca7400-ca5e-11eb-8c17-b93aeaf617fc.png">
 </p>
 
 In this repo, we provide an example to train and test uSFGAN as a vocoder for [WORLD](https://doi.org/10.1587/transinf.2015EDP7457) acoustic features.  
