@@ -8,7 +8,7 @@
 # (https://github.com/kan-bayashi/ParallelWaveGAN)
 #  MIT License (https://opensource.org/licenses/MIT)
 
-"""Decode with trained USFG Generator."""
+"""Decode with trained USFGAN Generator."""
 
 import argparse
 import logging
@@ -110,7 +110,7 @@ def main():
         device = torch.device("cpu")
     model_class = getattr(
         usfgan.models,
-        config.get("generator_type", "USFGGenerator"))
+        config.get("generator_type", "uSFGANGenerator"))
     model = model_class(**config["generator_params"])
     model.load_state_dict(
         torch.load(args.checkpoint, map_location="cpu")["model"]["generator"])
@@ -132,7 +132,6 @@ def main():
                 x += (z,)
             else:
                 raise NotImplementedError("Currently only 'noise' input is supported ")
-            f0[f0 > 0] = 244.0
             f0 = torch.FloatTensor(f0).unsqueeze(0).transpose(2, 1).to(device)
             c = pad_fn(torch.FloatTensor(c).unsqueeze(0).transpose(2, 1)).to(device)
             d = torch.FloatTensor(d).view(1, 1, -1).to(device)

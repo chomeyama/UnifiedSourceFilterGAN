@@ -704,12 +704,12 @@ def main():
     generator_class = getattr(
         usfgan.models,
         # keep compatibility
-        config.get("generator_type", "USFGGenerator"),
+        config.get("generator_type", "uSFGANGenerator"),
     )
     discriminator_class = getattr(
         usfgan.models,
         # keep compatibility
-        config.get("discriminator_type", "USFGDiscriminator"),
+        config.get("discriminator_type", "uSFGANDiscriminator"),
     )
     model = {
         "generator": generator_class(

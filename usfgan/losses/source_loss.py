@@ -55,4 +55,4 @@ class SourceLoss(torch.nn.Module):
         zeros = torch.zeros_like(spectral_envelope)
         loss = self.loss(zeros, spectral_envelope)
 
-        return loss
+        return loss / len(x)
