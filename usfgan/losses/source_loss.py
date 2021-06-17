@@ -27,10 +27,13 @@ class SourceLoss(torch.nn.Module):
                  q1=-0.15):
         """Initialize source loss module.
         Args:
-            fft_size (int): FFT size.
+            sampling_rate (int): Sampling rate.
             hop_size (int): Hop size.
-            win_length (int): Window length.
-            window (str): Window function type.
+            fft_size (int): FFT size.
+            f0_floor (int): Minimum F0 value.
+            f0_ceil (int): Maximum F0 value.
+            uv_threshold (float): V/UV determining threshold.
+            q1 (float): Parameter to remove effect of adjacent harmonics.
         """
         super(SourceLoss, self).__init__()
 
@@ -43,16 +46,16 @@ class SourceLoss(torch.nn.Module):
                                      q1=q1)
         self.loss = nn.MSELoss()
 
-    def forward(self, x, f):
+    def forward(self, s, f):
         """Calculate forward propagation.
         Args:
-            x (Tensor): Predicted source signal (B, T).
+            s (Tensor): Predicted source signal (B, T).
             f (Tensor): Extracted F0 sequence (B, T').
         Returns:
-            loss (Tensor): Source loss value.
+            source_loss (Tensor): Source loss value.
         """
-        spectral_envelope = self.cheaptrick.forward(x, f)
+        spectral_envelope = self.cheaptrick.forward(s, f)
         zeros = torch.zeros_like(spectral_envelope)
-        loss = self.loss(zeros, spectral_envelope)
+        source_loss = self.loss(zeros, spectral_envelope)
 
-        return loss / len(x)
+        return source_loss / len(s)

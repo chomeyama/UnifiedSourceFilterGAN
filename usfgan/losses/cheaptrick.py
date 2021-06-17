@@ -139,18 +139,22 @@ class CheapTrick(nn.Module):
                  f0_floor,
                  f0_ceil,
                  uv_threshold=0,
-                 q1=-0.15
+                 q1=-0.15,
         ):
         """Initilize AdaptiveLiftering module.
         Args:
             sampling_rate (int): Sampling rate.
+            hop_size (int): Hop size.
+            fft_size (int): FFT size.
             f0_floor (int): Minimum value of F0.
             f0_ceil (int): Maximum value of F0.
-            fft_size (int): FFT size.
+            uv_threshold (float): V/UV determining threshold.
             q1 (float): Parameter to remove effect of adjacent harmonics.
         """
         super(CheapTrick, self).__init__()
 
+        # fft_size must be larger than 3.0 * sampling_rate / f0_floor
+        assert fft_size > 3.0 * sampling_rate / f0_floor
         self.f0_floor = f0_floor
         self.f0_ceil = f0_ceil
         self.uv_threshold = uv_threshold
