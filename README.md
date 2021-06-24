@@ -121,6 +121,7 @@ $ tensorboard --logdir exp
 ```
 
 - The training time of uSFGAN_60 with a TITAN RTX 3090 is around 6 days.
+- It can be reduced by shortening the batch sequence length.
 
 
 ## Citation
