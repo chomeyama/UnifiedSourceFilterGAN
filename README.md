@@ -10,12 +10,6 @@ This is official  PyTorch implementation of [uSFGAN](https://arxiv.org/abs/2104.
 In this repo, we provide an example to train and test uSFGAN as a vocoder for [WORLD](https://doi.org/10.1587/transinf.2015EDP7457) acoustic features.  
 More details can be found on our [Demo](https://chomeyama.github.io/UnifiedSourceFilterGAN_demo/) page.
 
-
-## News
-
-- **2021/4** No news are available now. 
-
-
 ## Requirements
 
 This repository is tested on Ubuntu 20.04 with a Titan RTX 3090 GPU.
@@ -49,7 +43,9 @@ The folder for corpus related files (wav, feature, list ...).
 - **usfgan**:
 The folder of the source codes.
 
-- Other projects are also available in **egs/arctic** and **egs/vasc** .
+Projects on [CMU-ARCTIC](http://www.festvox.org/cmu_arctic/) corpus are also available 
+- Check **egs/arctic/*** 
+- Dataset separation is based on [Official NSF implementation](https://github.com/nii-yamagishilab/project-NN-Pytorch-scripts)
 
 ## Run
 
@@ -57,7 +53,6 @@ The folder of the source codes.
 
 - Modify the corresponding CUDA paths in `egs/vcc18/run.py`.
 - Download the [Voice Conversion Challenge 2018](https://datashare.is.ed.ac.uk/handle/10283/3061) (VCC2018) corpus to run the uSFGAN example.
-- If you want to run on other datasets, download [CMU-ARCTIC](http://www.festvox.org/cmu_arctic/) corpus or [声優統計コーパス](https://github.com/voice-statistics/voice-statistics.github.com).
 
 ```bash
 $ cd egs/vcc18
@@ -121,8 +116,6 @@ $ tensorboard --logdir exp
 ```
 
 - The training time of uSFGAN_60 with a TITAN RTX 3090 is around 6 days.
-- It can be reduced by shortening the batch sequence length.
-
 
 ## Citation
 If you find the code is helpful, please cite the following article.
