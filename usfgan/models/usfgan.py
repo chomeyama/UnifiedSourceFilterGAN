@@ -25,7 +25,7 @@ from usfgan.layers import FilterNetwork
 from usfgan.utils import pd_indexing, index_initial
 
 
-class uSFGANGenerator(torch.nn.Module):
+class USFGANGenerator(torch.nn.Module):
     """uSFGAN Generator module."""
 
     def __init__(self,
@@ -65,7 +65,7 @@ class uSFGANGenerator(torch.nn.Module):
             upsample_params (dict): Upsampling network parameters.
 
         """
-        super(uSFGANGenerator, self).__init__()
+        super(USFGANGenerator, self).__init__()
 
         torch.manual_seed(1)
         self.in_channels = in_channels
