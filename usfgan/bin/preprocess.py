@@ -483,8 +483,8 @@ def main():
         logging.info(msg)
         file_lists = np.array_split(file_list, 10)
         file_lists = [f_list.tolist() for f_list in file_lists]
-        config['minf0']  = 40
-        config['maxf0']  = 800
+        config['minf0']  = 70
+        config['maxf0']  = 270
         config['pow_th'] = -20
         configs = [config] * len(file_lists)
 

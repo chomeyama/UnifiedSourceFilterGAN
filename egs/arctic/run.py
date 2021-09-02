@@ -5,9 +5,9 @@
 
 """Pytorch uSFGAN script
 Usage: run.py [-h] [-g GPUID]
-            [-f FACTOR] [-C CONFIG] 
-            [-T TRAIN] [-V VALID] [-E EVAL] 
-            [-R RESUME] [-I ITER] 
+            [-f FACTOR] [-C CONFIG]
+            [-T TRAIN] [-V VALID] [-E EVAL]
+            [-R RESUME] [-I ITER]
             [-0] [-1] [-2]
 
 Options:
@@ -23,7 +23,7 @@ Options:
     -0, --step0  Execute step0 (Feature extraction)
     -1, --step1  Execute step1 (uSFGAN training)
     -2, --step2  Execute step2 (uSFGAN decodeing)
-    
+
 """
 import os
 from docopt import docopt
@@ -74,8 +74,8 @@ if __name__ == "__main__":
     entry_decode   = "usfgan-decode"
     train_version  = "arctic_train_16kHz"  # training
     valid_version  = "arctic_valid_16kHz"  # validation
-    eval_version   = "arctic_eval_16kHz"   # evaluation    
-    config_version = "uSFGAN_40"  # config
+    eval_version   = "arctic_eval_16kHz"   # evaluation
+    config_version = "uSFGAN_60"  # config
     model_iters    = "400000"  # iteration of testing model
     f0_factor      = "1.00"  # scaled factor of f0
     if args['-f'] is not None:
@@ -90,8 +90,8 @@ if __name__ == "__main__":
         config_version = args['-C']
     if args['-I'] is not None:
         model_iters = args['-I']
-    model_version = "%s_%s" % (network, train_version)  # model name 
-    spkinfo       = "data/pow_f0_dict.yml"
+    model_version = "%s_%s" % (network, train_version)  # model name
+    spkinfo       = "data/pow_f0_dict.yaml"
     config        = "conf/arctic.%s.yaml" % (config_version)
     stats         = "data/stats/%s.joblib" % (train_version)
     outdir        = "exp/%s_%s" % (model_version, config_version)
@@ -102,7 +102,7 @@ if __name__ == "__main__":
     valid_aux     = "data/scp/%s.list" % (valid_version)
     eval_aux      = "data/scp/%s.list" % (eval_version)
     _path_check([config])
-    
+
     # FEATURE EXTRACTION
     if execute_steps[0]:
         inverse = True  # If False, wav is restored from acoustic features
@@ -150,7 +150,7 @@ if __name__ == "__main__":
             " --seed "        + str(SEED) + \
             " --verbose 1 "
         os.system(cmd)
-    
+
     # EVALUATION (ANALYSIS-SYNTHESIS)
     if execute_steps[2]:
         # path setting
@@ -159,7 +159,7 @@ if __name__ == "__main__":
         # check trained model
         checkpoint = "%s/checkpoint-%ssteps.pkl" % (outdir, model_iters)
         _path_check([checkpoint])
-        
+
         # speech decoding
         cmd = entry_decode   + \
             " --eval_feat "  + eval_aux + \

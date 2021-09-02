@@ -3,7 +3,7 @@
 # Copyright 2021 Reo Yoneyama (Nagoya University)
 #  MIT License (https://opensource.org/licenses/MIT)
 
-"""CheapTrick-based Sourse Loss module."""
+"""Source Excitation Spectral Envelope Regularization Loss module."""
 
 import numpy as np
 import pyworld

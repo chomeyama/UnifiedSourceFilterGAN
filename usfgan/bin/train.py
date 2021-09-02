@@ -167,6 +167,7 @@ class Trainer(object):
         y_, s_, f = self.model["generator"](*x)
         y, y_, s_, f = y.squeeze(1), y_.squeeze(1), s_.squeeze(1), f.squeeze(1)
         stft_loss = self.criterion["stft"](y_, y)
+        # spectral envelope regularization loss
         source_loss = self.criterion["source"](s_, f)
         gen_loss = stft_loss + self.config["lambda_source"] * source_loss
         if self.steps > self.config["discriminator_train_start_steps"]:
@@ -261,6 +262,7 @@ class Trainer(object):
         p_ = self.model["discriminator"](y_)
         y, y_, s_, f = y.squeeze(1), y_.squeeze(1), s_.squeeze(1), f.squeeze(1)
         stft_loss = self.criterion["stft"](y_, y)
+        # spectral envelope regularization loss
         source_loss = self.criterion["source"](s_, f)
         aux_loss = stft_loss + self.config["lambda_source"] * source_loss
         if self.steps > self.config["discriminator_train_start_steps"]:
@@ -340,12 +342,54 @@ class Trainer(object):
         if not os.path.exists(dirname):
             os.makedirs(dirname)
 
+        len50ms = int(self.config["sampling_rate"] * 0.05)
+        start = np.random.randint(0, self.config["batch_max_steps"] - len50ms)
+        end = start + len50ms
+
         for idx, (y, y_, s_) in enumerate(zip(y_batch, y_batch_, s_batch_), 1):
             # convert to ndarray
             y, y_, s_ = y.view(-1).cpu().numpy(), y_.view(-1).cpu().numpy(), s_.view(-1).cpu().numpy()
 
-            # plot figure and save it
-            figname = os.path.join(dirname, f"{idx}.png")
+            # plot spectrogram of original signal
+            fig = plt.figure(figsize=(10, 8))
+            spectrogram = np.abs(librosa.stft(
+                                y=y,
+                                n_fft=1024,
+                                hop_length=120,
+                                win_length=1024,
+                                window='hann'))
+            spectrogram_db = librosa.amplitude_to_db(spectrogram, ref=np.max)
+            librosa.display.specshow(spectrogram_db,
+                                sr=self.config["sampling_rate"],
+                                y_axis='linear',
+                                x_axis='time',
+                                hop_length=128)
+            plt.title(f"natural spectorogram @ {self.steps} steps")
+            self.writer.add_figure(f"natural_spectrogram{idx}.png", fig, self.steps)
+            plt.clf()
+            plt.close()
+
+            # plot spectraogram of source signal
+            fig = plt.figure(figsize=(10, 8))
+            spectrogram = np.abs(librosa.stft(
+                                y=s_,
+                                n_fft=1024,
+                                hop_length=128,
+                                win_length=1024,
+                                window='hann'))
+            spectrogram_db = librosa.amplitude_to_db(spectrogram, ref=np.max)
+            librosa.display.specshow(spectrogram_db,
+                                sr=self.config["sampling_rate"],
+                                y_axis='linear',
+                                x_axis='time',
+                                hop_length=128)
+            plt.title(f"source spectorogram @ {self.steps} steps")
+            self.writer.add_figure(f"source_spectrogram{idx}.png", fig, self.steps)
+            plt.clf()
+            plt.close()
+
+            # plot generated waveform
+            fig = plt.figure(figsize=(10, 6))
             plt.subplot(2, 1, 1)
             plt.plot(y)
             plt.title("groundtruth speech")
@@ -353,49 +397,28 @@ class Trainer(object):
             plt.plot(y_)
             plt.title(f"generated speech @ {self.steps} steps")
             plt.tight_layout()
-            plt.savefig(figname)
+            self.writer.add_figure(f"generated_waveform{idx}", fig, self.steps)
+            plt.clf()
+            plt.close()
+
+            # plot source excitation waveform
+            fig = plt.figure(figsize=(10, 6))
+            plt.subplot(2, 1, 1)
+            plt.plot(y[start: end], linewidth=1)
+            plt.title("groundtruth speech")
+            plt.subplot(2, 1, 2)
+            plt.plot(s_[start: end], linewidth=1)
+            plt.title(f"generated source @ {self.steps} steps")
+            plt.tight_layout()
+            self.writer.add_figure(f"source_waveform{idx}.png", fig, self.steps)
             plt.clf()
             plt.close()
 
             # save as wavfile
-            y = np.clip(y, -1, 1)
-            y_ = np.clip(y_, -1, 1)
-            sf.write(figname.replace(".png", "_ref.wav"), y,
-                     self.config["sampling_rate"], "PCM_16")
-            sf.write(figname.replace(".png", "_gen.wav"), y_,
-                     self.config["sampling_rate"], "PCM_16")
-
-            # plot source waveform
-            figname = os.path.join(dirname, f"{idx}_src_wave.png")
-            plt.subplot(2, 1, 1)
-            plt.plot(y[1000:1600], linewidth=1)
-            plt.title("groundtruth speech")
-            plt.subplot(2, 1, 2)
-            plt.plot(s_[1000:1600], linewidth=1)
-            plt.title(f"generated source @ {self.steps} steps")
-            plt.tight_layout()
-            plt.savefig(figname)
-            plt.clf()
-            plt.close()
-
-            # plot source spectraogram
-            figname = os.path.join(dirname, f"{idx}_src_spec.png")
-            spectrogram = np.abs(librosa.stft(
-                                 y=s_,
-                                 n_fft=1024,
-                                 hop_length=128,
-                                 win_length=1024,
-                                 window='hann'))
-            spectrogram_db = librosa.amplitude_to_db(spectrogram, ref=np.max)
-            librosa.display.specshow(spectrogram_db,
-                                     sr=self.config["sampling_rate"],
-                                     y_axis='linear',
-                                     x_axis='time',
-                                     hop_length=128)
-            plt.title(f"source spectorogram @ {self.steps} steps")
-            plt.savefig(figname)
-            plt.clf()
-            plt.close()
+            y, y_, s_ = np.clip(y, -1, 1), np.clip(y_, -1, 1), s_ / np.max(np.abs(s_))
+            self.writer.add_audio(f"ref{idx}.wav", y, self.steps, self.config["sampling_rate"])
+            self.writer.add_audio(f"gen{idx}.wav", y_, self.steps, self.config["sampling_rate"])
+            self.writer.add_audio(f"src{idx}.wav", s_, self.steps, self.config["sampling_rate"])
 
             if idx >= self.config["num_save_intermediate_results"]:
                 break
