@@ -21,7 +21,6 @@ class STFTLoss(torch.nn.Module):
         self.hop_size = hop_size
         self.win_length = win_length
         self.window = getattr(torch, window)(win_length).cuda()
-        self.amp_floor = 0.00001
         self.mse_loss = torch.nn.MSELoss()
 
     def forward(self, x, y):
@@ -37,9 +36,9 @@ class STFTLoss(torch.nn.Module):
                             window=self.window, onesided=True, pad_mode="constant")
         y_stft = torch.stft(y, self.fft_size, self.hop_size, self.win_length,
                             window=self.window, onesided=True, pad_mode="constant")
-        
-        x_log_pow = torch.log(torch.norm(x_stft, 2, -1).pow(2) + self.amp_floor)
-        y_log_pow = torch.log(torch.norm(y_stft, 2, -1).pow(2) + self.amp_floor)
+
+        x_log_pow = torch.log(torch.clamp(torch.norm(x_stft, 2, -1).pow(2), min=1e-7))
+        y_log_pow = torch.log(torch.clamp(torch.norm(y_stft, 2, -1).pow(2), min=1e-7))
 
         stft_loss = self.mse_loss(x_log_pow, y_log_pow)
 
