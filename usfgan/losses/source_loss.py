@@ -54,8 +54,7 @@ class SourceLoss(torch.nn.Module):
         Returns:
             source_loss (Tensor): Source loss value.
         """
-        spectral_envelope = self.cheaptrick.forward(s, f)
-        zeros = torch.zeros_like(spectral_envelope)
-        source_loss = self.loss(zeros, spectral_envelope)
+        e = self.cheaptrick.forward(s, f)
+        source_loss = self.loss(e, e.new_zeros(e.size()))
 
-        return source_loss / len(s)
+        return source_loss
