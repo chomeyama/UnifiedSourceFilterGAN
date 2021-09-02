@@ -1,0 +1,16 @@
+bdl:
+  f0_min: 75
+  f0_max: 170
+  pow_th: -20
+clb:
+  f0_min: 130
+  f0_max: 270
+  pow_th: -20
+rms:
+  f0_min: 70
+  f0_max: 140
+  pow_th: -20
+slt:
+  f0_min: 130
+  f0_max: 230
+  pow_th: -20
