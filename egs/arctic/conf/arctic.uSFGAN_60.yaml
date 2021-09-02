@@ -13,17 +13,19 @@ hop_size: 80               # Hop size.
 shiftms: 5                 # Frame shift (ms)
 mcep_dim: 25               # Mcep dim
 mcep_alpha: 0.42           # Mcep alpha
-highpass_cutoff: 70        # Cutoff frequency of preprocessing highpass filter
+highpass_cutoff: 0         # Cutoff frequency of preprocessing highpass filter
 uv_dim_idx: 0              # u/v dimension index
 f0_dim_idx: 1              # f0 dimension index
 mcep_dim_start: 2          # First dimension index of mcep
 mcep_dim_end: 28           # Last dimension index of mcep
-ap_dim_start: 29           # First dimension index of coded ap 
+ap_dim_start: 29           # First dimension index of coded ap
 ap_dim_end: 29             # Last dimension index of coded ap
 stats_shift: 1             # Skip U/V in calculating statistics
 f0_cont: False             # Continuous F0 or descrete F0
-minf0: 40                  # Minimum f0
-maxf0: 600                 # Maximum f0
+                           # In original uSFGAN paper, continuous F0 is used,
+                           # but discrete F0 is better to reduce V/UV error.
+minf0: 70                  # Minimum f0
+maxf0: 270                 # Maximum f0
 pow_th: -20                # Power threshold
 mean_path: "/world/mean"
 scale_path: "/world/scale"
@@ -31,7 +33,7 @@ scale_path: "/world/scale"
 ###########################################################
 #         GENERATOR NETWORK ARCHITECTURE SETTING          #
 ###########################################################
-generator_type: "uSFGANGenerator" # Generator type.
+generator_type: "USFGANGenerator" # Generator type.
 generator_params:
     sampling_rate: 16000  # Sampling rate.
     hop_size: 80          # Hop size.
@@ -80,12 +82,12 @@ stft_loss_params:
 ###########################################################
 #                  SOURCE LOSS SETTING                    #
 ###########################################################
-source_loss_params:
+source_loss_params:      # Spectral envelope regularization loss
     sampling_rate: 16000 # Sampling rate.
     hop_size: 80         # Hop size.
     fft_size: 1024       # FFT size.
-    f0_floor: 50         # Minimum F0 value.
-    f0_ceil: 500         # Maximum F0 value.
+    f0_floor: 70         # Minimum F0 value.
+    f0_ceil: 270         # Maximum F0 value.
                          # 'fft_size' must be larger than (3.0 * 'sampling_rate' / 'f0_floor')
 
 ###########################################################
@@ -98,7 +100,7 @@ lambda_adv: 4.0            # Loss balancing coefficient.
 #                  DATA LOADER SETTING                    #
 ###########################################################
 batch_size: 6              # Batch size.
-batch_max_steps: 16000     # Length of each audio in batch. Make sure dividable by hop_size.
+batch_max_steps: 12000     # Length of each audio in batch. Make sure dividable by hop_size.
 pin_memory: true           # Whether to pin memory in Pytorch DataLoader.
 num_workers: 2             # Number of workers in Pytorch DataLoader.
 remove_short_samples: true # Whether to remove samples the length of which are less than batch_max_steps.
