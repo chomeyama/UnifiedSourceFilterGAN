@@ -337,11 +337,6 @@ class Trainer(object):
         y_batch = y_batch.to(self.device)
         y_batch_, s_batch_, f_batch_ = self.model["generator"](*x_batch)
 
-        # check directory
-        dirname = os.path.join(self.config["outdir"], f"predictions/{self.steps}steps")
-        if not os.path.exists(dirname):
-            os.makedirs(dirname)
-
         len50ms = int(self.config["sampling_rate"] * 0.05)
         start = np.random.randint(0, self.config["batch_max_steps"] - len50ms)
         end = start + len50ms
