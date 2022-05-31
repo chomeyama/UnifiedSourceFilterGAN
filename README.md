@@ -1,13 +1,15 @@
 
 # Unified Source-Filter GAN (uSFGAN)
 
-This is official  PyTorch implementation of [uSFGAN](https://arxiv.org/abs/2104.04668), which is a unified source-filter network based on factorization of [QPPWG](https://github.com/bigpon/QPPWG) by Yi-Chiao Wu @ Nagoya University ([@bigpon](https://github.com/bigpon)).
+<b>I released a new PyTorch implementation of uSFGAN in addition to a better model, Harmonic-plus-Noise uSFGAN [here](https://github.com/chomeyama/HN-UnifiedSourceFilterGAN).</b>
+
+This is official PyTorch implementation of [uSFGAN](https://arxiv.org/abs/2104.04668), which is a unified source-filter network based on factorization of [QPPWG](https://github.com/bigpon/QPPWG) by Yi-Chiao Wu @ Nagoya University ([@bigpon](https://github.com/bigpon)).
 
 <p align="center">
 <img width="754" alt="architecture" src="https://user-images.githubusercontent.com/49127218/121571723-55ca7400-ca5e-11eb-8c17-b93aeaf617fc.png">
 </p>
 
-In this repo, we provide an example to train and test uSFGAN as a vocoder for [WORLD](https://doi.org/10.1587/transinf.2015EDP7457) acoustic features.  
+In this repo, we provide an example to train and test uSFGAN as a vocoder for [WORLD](https://doi.org/10.1587/transinf.2015EDP7457) acoustic features.
 More details can be found on our [Demo](https://chomeyama.github.io/UnifiedSourceFilterGAN_demo/) page.
 
 ## Requirements
@@ -43,8 +45,8 @@ The folder for corpus related files (wav, feature, list ...).
 - **usfgan**:
 The folder of the source codes.
 
-Projects on [CMU-ARCTIC](http://www.festvox.org/cmu_arctic/) corpus are also available 
-- Check **egs/arctic/*** 
+Projects on [CMU-ARCTIC](http://www.festvox.org/cmu_arctic/) corpus are also available
+- Check **egs/arctic/***
 - Dataset separation is based on [Official NSF implementation](https://github.com/nii-yamagishilab/project-NN-Pytorch-scripts)
 
 ## Run
@@ -139,7 +141,7 @@ E-mail: `yoneyama.reo@g.sp.m.is.nagoya-u.ac.jp`
 
 Advisor:
 Yi-Chiao Wu @ Nagoya University ([@bigpon](https://github.com/bigpon))<br>
-E-mail: `yichiao.wu@g.sp.m.is.nagoya-u.ac.jp`  
+E-mail: `yichiao.wu@g.sp.m.is.nagoya-u.ac.jp`
 
 Tomoki Toda @ Nagoya University<br>
 E-mail: `tomoki@icts.nagoya-u.ac.jp`
