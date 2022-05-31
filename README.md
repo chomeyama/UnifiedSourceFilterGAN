@@ -121,24 +121,25 @@ $ tensorboard --logdir exp
 If you find the code is helpful, please cite the following article.
 
 ```
-@misc{yoneyama2021unified,
-      title={Unified Source-Filter GAN: Unified Source-filter Network Based On Factorization of Quasi-Periodic Parallel WaveGAN}, 
-      author={Reo Yoneyama and Yi-Chiao Wu and Tomoki Toda},
-      year={2021},
-      eprint={2104.04668},
-      archivePrefix={arXiv},
-      primaryClass={cs.SD}
+@inproceedings{yoneyama21_interspeech,
+  author={Reo Yoneyama and Yi-Chiao Wu and Tomoki Toda},
+  title={{Unified Source-Filter GAN: Unified Source-Filter Network Based On Factorization of Quasi-Periodic Parallel WaveGAN}},
+  year=2021,
+  booktitle={Proc. Interspeech 2021},
+  pages={2187--2191},
+  doi={10.21437/Interspeech.2021-517}
 }
 ```
 
 ## Authors
 
 Development:
-Reo Yoneyama @ Nagoya University ([@chomeyama](https://github.com/chomeyama))<br />
+Reo Yoneyama @ Nagoya University ([@chomeyama](https://github.com/chomeyama))<br>
 E-mail: `yoneyama.reo@g.sp.m.is.nagoya-u.ac.jp`
 
 Advisor:
-Yi-Chiao Wu @ Nagoya University ([@bigpon](https://github.com/bigpon))<br />
+Yi-Chiao Wu @ Nagoya University ([@bigpon](https://github.com/bigpon))<br>
 E-mail: `yichiao.wu@g.sp.m.is.nagoya-u.ac.jp`  
-Tomoki Toda @ Nagoya University<br />
+
+Tomoki Toda @ Nagoya University<br>
 E-mail: `tomoki@icts.nagoya-u.ac.jp`
