@@ -10,7 +10,7 @@ This is official PyTorch implementation of [uSFGAN](https://arxiv.org/abs/2104.0
 </p>
 
 In this repo, we provide an example to train and test uSFGAN as a vocoder for [WORLD](https://doi.org/10.1587/transinf.2015EDP7457) acoustic features.
-More details can be found on our [Demo](https://chomeyama.github.io/UnifiedSourceFilterGAN_demo/) page.
+More details can be found on our [Demo](https://chomeyama.github.io/UnifiedSourceFilterGAN-Demo/) page.
 
 ## Requirements
 
